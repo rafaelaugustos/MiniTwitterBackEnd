@@ -49,3 +49,44 @@ function insert($tabela, array $campos){
 		return false;
 	}
 }
+
+
+// UPDATE
+function update($table, array $dados, $where = null){
+	global $pdo;
+	$strUpdate = "UPDATE ".$table." SET ";
+	$valores   = array_values($dados);
+
+	$n = 0;
+	foreach(array_keys($dados) as $i => $campo){
+		$strUpdate .= "".$campo." = '".$valores[$i]."'";
+		$n++;
+		if($n < count($valores)){
+			$strUpdate .= ", ";
+		}
+	}
+
+	if(!is_null($where)){
+		$strUpdate .= " WHERE $where";
+	} 
+
+	echo $strUpdate;
+	$update = $pdo->prepare($strUpdate);
+	if($update->execute()){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+// DELETE
+function delete($table, $where){
+	global $pdo;
+	$strDelete = "DELETE FROM ".$table." WHERE ".$where."";
+	$del = $pdo->prepare($strDelete);
+	if($del->execute()){
+		return true;
+	}else{
+		return false;
+	}
+}
